@@ -6,7 +6,6 @@ from pynput.keyboard import Key, Listener
 from random import randrange
 from functools import partial
 import json
-import threading
 
 PATH = "C:\Program Files (x86)\chromedriver.exe"
 options = webdriver.ChromeOptions()
@@ -82,8 +81,6 @@ def selectrandom(link):
         driver.execute_script("window.scrollTo(0, 1080)")
         video.click()
     title = driver.execute_script("return document.title;")
-    # print(movielist)
-    # SPRAWDZIC OBECNOSC PRED ODPALENIEM
     if title in movielist:
         print('this movie has been watched already, switching to a new one')
         main(globalpref)
@@ -207,8 +204,6 @@ def main(pref):
 
     try:
         selectrandom(preferences())
-        # print(data["preferences"])
-        # selectnext()
         fullscreen()
         adbuster()
         with Listener(
@@ -220,10 +215,3 @@ def main(pref):
 
 
 pussywagon()
-
-
-
-
-
-
-
