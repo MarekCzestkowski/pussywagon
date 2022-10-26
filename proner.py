@@ -1,5 +1,6 @@
 import time
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 import tkinter
 from pynput.keyboard import Key, Listener
@@ -17,7 +18,7 @@ driver = webdriver.Chrome(executable_path=PATH, options=options)
 # window app initialization
 root = tkinter.Tk()
 
-#initailizing config file
+# initailizing config file
 with open('proner_cfg.json') as f:
     data = json.load(f)
 
@@ -26,6 +27,7 @@ globalpref = ""
 loggedin = False
 ff = 1
 movielist = []
+
 
 def on_release(key):
     if key == Key.space:
@@ -46,9 +48,9 @@ def on_press(key):
 def rate(r):
     try:
         if r == "up":
-            thumb = driver.find_element_by_class_name("js-voteUp")
+            thumb = driver.find_element(By.CLASS_NAME, "js-voteUp")
         elif r == "down":
-            thumb = driver.find_element_by_class_name("js-voteDown")
+            thumb = driver.find_element(By.CLASS_NAME, "js-voteDown")
         else:
             pass
         thumb.click()
@@ -74,7 +76,8 @@ def selectrandom(link):
     driver.get(link)
     x = randrange(2, 22)
     if globalpref == "1":
-        video = driver.find_element_by_css_selector("div#recommendations>div>div:nth-of-type(3)>ul>li:nth-of-type(" + str(x) + ")>div>div>a")
+        video = driver.find_element(
+            By.CSS_SELECTOR, "div#recommendations>div>div:nth-of-type(3)>ul>li:nth-of-type(" + str(x) + ")>div>div>a")
     try:
         video.click()
     except:
@@ -88,13 +91,13 @@ def selectrandom(link):
 
 
 def selectnext():
-    x = randrange(1,36)
-    video = driver.find_element_by_css_selector("#relatedVideosCenter")
+    x = randrange(1, 36)
+    video = driver.find_element(By.CSS_SELECTOR, "#relatedVideosCenter")
     video.click()
 
 
 def fullscreen():
-    video = driver.find_element_by_css_selector("#player > video-element")
+    video = driver.find_element(By.CSS_SELECTOR, "#player > video-element")
     time.sleep(0.1)
     actionChains = ActionChains(driver)
     actionChains.double_click(video).perform()
@@ -107,7 +110,7 @@ def adbuster():
             chwd = driver.window_handles
             if len(chwd) == 1:
                 break
-            #this for loop should dismiss any ad notications but it is not working properly yet
+            # this for loop should dismiss any ad notications but it is not working properly yet
             # for c in chwd:
             #     try:
             #         driver.switch_to.window(c)
@@ -134,7 +137,8 @@ def pussywagon():
     b1 = tkinter.Button(root, text="Recommended", command=partial(main, "1"))
     b1.pack()
 
-    b2 = tkinter.Button(root, text="Recommended with login", command=partial(main, "2"))
+    b2 = tkinter.Button(root, text="Recommended with login",
+                        command=partial(main, "2"))
     b2.pack()
 
     l2 = tkinter.Label(root, text="HOTKEYS\nspacebar to play next random \nleft ctrl to fast forward 10% \nleft shift to dislike and play next random \nfast forward to 100% to like video and play next random \nesc to ragequit when someone walks in")
@@ -164,10 +168,12 @@ def preferences():
 def login():
     driver.get(data["loginpage"])
     try:
-        driver.find_element_by_css_selector("#username").send_keys(data["login"])
-        driver.find_element_by_css_selector("#password").send_keys(data["pass"])
+        driver.find_element(
+            By.CSS_SELECTOR, "#username").send_keys(data["login"])
+        driver.find_element(
+            By.CSS_SELECTOR, "#password").send_keys(data["pass"])
         time.sleep(0.2)
-        driver.find_element_by_css_selector("#submit").click()
+        driver.find_element(By.CSS_SELECTOR, "#submit").click()
         time.sleep(1)
         global loggedin
         loggedin = True
